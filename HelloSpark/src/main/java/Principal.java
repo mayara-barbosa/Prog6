@@ -28,7 +28,7 @@ public class Principal {
 		JavaRDD<Integer> listaQuadrad = listaRDD.map(n -> (n* n));//MAP transformacao
 		
 		JavaRDD<String> linhas = sc.textFile("in/word_count.text");
-		JavaRDD<String> palavras = linhas.flatMap(linha -> Arrays.asList(linha.split(" ")));
+		//JavaRDD<String> palavras = linhas.flatMap(linha -> linha.split(" "));
 		
 		JavaRDD<String> linhasFiltradas = linhas.filter(linha -> linha.contains("New York"));
 		
@@ -47,6 +47,18 @@ public class Principal {
 		}
 		
 		System.out.println("Linhas filtradas: "+ quantidade);
+		
+		List<String> transacoes = new ArrayList<String>();
+		
+		JavaRDD<String> transacoesRDD = sc.textFile("in/Transacoes.csv");
+		JavaRDD<String> amostraRDD = transacoesRDD.sample(true, 0.3);
+		transacoesRDD.saveAsTextFile("out/transacoes");
+		
+		transacoes = amostraRDD.collect();
+				
+		for (String a : transacoes) {
+			System.out.println(a);
+		}
 		
 		
 	}
